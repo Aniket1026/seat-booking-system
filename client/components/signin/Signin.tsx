@@ -43,7 +43,7 @@ export default function SignIn({ setIsSignIn }: { setIsSignIn: any }) {
       console.log("Error in signin", error);
       throw new Error("Error in signin" + error.message);
     }
-    await router.push("/seat-booking");
+     router.replace("/seat-booking");
   };
 
   return (
