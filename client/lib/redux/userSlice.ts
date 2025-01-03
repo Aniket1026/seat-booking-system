@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { User } from '../../types/User.type'
+import { User } from "../../types/User.type";
 const URL = process.env.NEXT_PUBLIC_API_URL!;
 
 interface UserState {
@@ -14,34 +14,68 @@ const initialState: UserState = {
   error: null,
 };
 
-export const signUpHandler = createAsyncThunk("user/signUp", async (user: User) => {
-  try {
-    const response = await fetch(`${URL}/signup`, {
-      method: "POST",
-      headers: {},
-      body: JSON.stringify(user),
-    });
-    return response.json();
-  } catch (error: any) {
-    throw new Error("Error in signing up: " + error.message);
-  }
-});
+export const signUpHandler = createAsyncThunk(
+  "user/signUp",
+  async (user: User) => {
+    try {
+      const response = await fetch(`${URL}/signup`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(user),
+      });
 
-export const loginHandler = createAsyncThunk("user/login", async (user: User) => {
-  try {
-    const response = await fetch(`${URL}/login`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(user),
-      credentials: "include",
-    });
-    return response.json();
-  } catch (error: any) {
-    throw new Error("Error in logging in: " + error.message);
+      if (!response.ok) {
+        const errorData = await response.json();
+        return {
+          status: response.status,
+          message: errorData?.message || "Signup failed",
+        };
+      }
+
+      const data = await response.json();
+      return {
+        status: response.status,
+        user: data,
+      };
+    } catch (error: any) {
+      throw new Error("Error in signing up: " + error.message);
+    }
   }
-});
+);
+
+export const loginHandler = createAsyncThunk(
+  "user/login",
+  async (user: User) => {
+    try {
+      const response = await fetch(`${URL}/login`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(user),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        return {
+          status: response.status,
+          message: errorData?.message || "Login failed",
+        };
+      }
+
+      const data = await response.json();
+
+      return {
+        status: response.status,
+        user: data,
+      };
+    } catch (error: any) {
+      throw new Error("Error in logging in: " + error.message);
+    }
+  }
+);
 
 export const logoutHandler = createAsyncThunk("user/logout", async () => {
   try {

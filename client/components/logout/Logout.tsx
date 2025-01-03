@@ -2,6 +2,7 @@ import { useRouter } from "next/navigation";
 import { useDispatch } from "react-redux";
 import { logoutHandler } from "@/lib/redux/userSlice";
 import { AppDispatch } from "@/lib/redux/store";
+import { Button } from "../ui/button";
 
 export const Logout = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -12,18 +13,13 @@ export const Logout = () => {
       await dispatch(logoutHandler());
       router.push("/");
     } catch (error: any) {
-      console.error("Error in logging out: " + error.message);
+      throw new Error("Error in logging out: " + error.message);
     }
   };
 
   return (
     <div>
-      <button
-        onClick={handleLogout}
-        className="bg-black text-white font-bold py-2 px-4 rounded"
-      >
-        Logout
-      </button>
+      <Button onClick={handleLogout}>Logout</Button>
     </div>
   );
 };

@@ -29,21 +29,19 @@ export default function SignIn({ setIsSignIn }: { setIsSignIn: any }) {
       const response = await dispatch(
         loginHandler({ email, password })
       ).unwrap();
-      console.log("response after log in", response);
-      if (response.message === "Login successful") {
+
+      if (response.status === 400) {
+        toast({ description: "No user found" });
+        return;
+      }
+
+      if (response.user) {
         toast({ description: "Login successful" });
-      }
-      if (response.error === "Incorrect password") {
-        toast({ description: "Incorrect password" });
-      }
-      if (response.error === "User does not exist") {
-        toast({ description: "User does not exist" });
+        router.replace("/seat-booking");
       }
     } catch (error: any) {
-      console.log("Error in signin", error);
       throw new Error("Error in signin" + error.message);
     }
-     router.replace("/seat-booking");
   };
 
   return (

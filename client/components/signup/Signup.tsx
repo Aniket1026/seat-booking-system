@@ -11,26 +11,40 @@ import {
   CardContent,
   CardFooter,
 } from "@/components/ui/card";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useRouter } from "next/navigation";
 import { AppDispatch } from "@/lib/redux/store";
 import { signUpHandler } from "@/lib/redux/userSlice";
+import { useToast } from "@/hooks/use-toast";
 
 export default function SignUp({ setIsSignIn }: { setIsSignIn: any }) {
   const dispatch = useDispatch<AppDispatch>();
+  const { user, error, status } = useSelector((state: any) => state.user);
   const router = useRouter();
+  const { toast } = useToast();
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
   const handleSignUp = async (e: React.FormEvent) => {
-   try {
-     e.preventDefault();
-     await dispatch(signUpHandler({ name, email, password }));
-     router.push("/seat-booking");
-   } catch (error:any) {
-     throw new Error("Error in signup"+error.message);
-   }
+    try {
+      e.preventDefault();
+      const response = await dispatch(
+        signUpHandler({ name, email, password })
+      ).unwrap();
+
+      if (response.status === 400) {
+        toast({ description: "User already exists" });
+        return;
+      }
+
+      if (response.user) {
+        router.push("/seat-booking");
+        toast({ description: "User created successfully" });
+      }
+    } catch (error: any) {
+      throw new Error("Error in signup" + error.message);
+    }
   };
 
   return (

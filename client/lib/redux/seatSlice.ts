@@ -25,8 +25,6 @@ export const fetchSeats = createAsyncThunk("booking/fetchSeats", async () => {
       },
       credentials: "include",
     });
-    console.log("Fetched seats : ");
-    // console.log("Fetched seats : ",response.json());
     return response.json() as Promise<Seat[]>;
   } catch (error: any) {
     throw new Error("Error in getting bookings: " + error.message);
@@ -42,7 +40,6 @@ export const resetAllSeats = createAsyncThunk("booking/resetSeats", async () => 
       },
       credentials: "include",
     });
-    console.log("Fetched seats : ", response.json());
     return response.json() as Promise<Seat[]>;
   } catch (error: any) {
     throw new Error("Error in getting bookings: " + error.message);
