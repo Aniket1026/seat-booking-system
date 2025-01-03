@@ -11,7 +11,7 @@ import {
   CardContent,
   CardFooter,
 } from "@/components/ui/card";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { useRouter } from "next/navigation";
 import { AppDispatch } from "@/lib/redux/store";
 import { signUpHandler } from "@/lib/redux/userSlice";
@@ -19,7 +19,6 @@ import { useToast } from "@/hooks/use-toast";
 
 export default function SignUp({ setIsSignIn }: { setIsSignIn: any }) {
   const dispatch = useDispatch<AppDispatch>();
-  const { user, error, status } = useSelector((state: any) => state.user);
   const router = useRouter();
   const { toast } = useToast();
   const [name, setName] = useState("");
