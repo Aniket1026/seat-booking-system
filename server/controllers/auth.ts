@@ -14,14 +14,15 @@ export const signupHanlder = async (
     const { name, email, password } = req.body;
 
     if (!name || !email || !password) {
-      Response.json(
-        { message: "Please provide all required fields" },
-        { status: 400 }
-      );
+      res.status(400).json({ message: "Please provide all required fields" });
+      return;
     }
 
     const userExists = await prisma.user.findUnique({ where: { email } });
-    if (userExists) res.status(400).json({ message: "User already exists" });
+    if (userExists) {
+      res.status(400).json({ message: "User already exists" });
+      return;
+    }
 
     const hashedPassword = await bcryptjs.hash(password, 10);
     const user = await prisma.user.create({
@@ -31,10 +32,6 @@ export const signupHanlder = async (
         password: hashedPassword,
       },
     });
-
-    if (!process.env.JWT_SECRET) {
-      throw new Error("JWT_SECRET is not defined in environment variables");
-    }
 
     const token = await createToken({ id: user.id });
 
@@ -52,20 +49,17 @@ export const loginHandler = async (
   res: Response
 ): Promise<void> => {
   try {
-    
     const { email, password } = req.body;
     if (!email || !password) {
-      res.status(400).json(
-        { error: "Email and password are required" },
-      );
+      res.status(400).json({ error: "Email and password are required" });
     }
 
     const user = await prisma.user.findUnique({ where: { email } });
     if (!user) {
-       res.status(400).json({
-         error: "User does not exist",
-        });
-        return
+      res.status(400).json({
+        error: "User does not exist",
+      });
+      return;
     }
 
     const passwordMatch = await bcryptjs.compare(password, user?.password);
@@ -77,7 +71,7 @@ export const loginHandler = async (
 
     const token = await createToken({ id: user?.id });
 
-    res.cookie("token", token, cookieOptions)
+    res.cookie("token", token, cookieOptions);
     res.status(200).json({
       message: "Login successful",
       user,

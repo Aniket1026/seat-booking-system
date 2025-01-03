@@ -39,15 +39,11 @@ export const bookSeat = async (
 
     const userId = req.user.id;
 
-    console.log("Booking seats for user:", userId);
-
     try {
       // Find available seats
       const availableSeatIds = await SeatBookingService.findAvailableSeats(
         numOfSeats
       );
-
-      console.log("Available Seat IDs:", availableSeatIds);
 
       if (!availableSeatIds || availableSeatIds.length !== numOfSeats) {
         res.status(400).json({
@@ -84,8 +80,6 @@ export const bookSeat = async (
       return;
     }
   } catch (error: any) {
-    // Handle unexpected errors
-    console.error("Error in booking seat:", error);
     res.status(500).json({
       error: "Internal server error occurred while booking seats",
     });
