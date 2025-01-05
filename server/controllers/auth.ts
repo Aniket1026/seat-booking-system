@@ -72,10 +72,12 @@ export const loginHandler = async (
 
     const token = await createToken({ id: user?.id });
 
+    const { password: userPassword, ...userData } = user;
+
     res.cookie("token", token, cookieOptions);
     res.status(200).json({
       message: "Login successful",
-      user,
+      userData,
     });
   } catch (error: any) {
     res.status(500).json({ error: error.message });
