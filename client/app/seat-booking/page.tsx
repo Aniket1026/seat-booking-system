@@ -18,6 +18,7 @@ import { AppDispatch } from "@/lib/redux/store";
 import { fetchSeats, resetAllSeats } from "@/lib/redux/seatSlice";
 import { bookingHistory, bookSeats } from "@/lib/redux/bookingSlice";
 import { Logout } from "@/components/logout/Logout";
+import { Skeleton } from "@/components/ui/skeleton";
 
 export default function TrainBookingSystem() {
   const dispatch = useDispatch<AppDispatch>();
@@ -82,7 +83,13 @@ export default function TrainBookingSystem() {
                 <div className="col-span-7 text-red-500">Cannot book seats</div>
               )}
               {status !== "success" ? (
-                <div className="col-span-7 text-center py-4">Loading...</div>
+                <div className="flex items-center space-x-4">
+                  <Skeleton className="h-12 w-12 rounded-full" />
+                  <div className="space-y-2">
+                    <Skeleton className="h-4 w-[250px]" />
+                    <Skeleton className="h-4 w-[200px]" />
+                  </div>
+                </div>
               ) : (
                 <>
                   {seats &&
