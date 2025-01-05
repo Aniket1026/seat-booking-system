@@ -22,6 +22,7 @@ export const signUpHandler = createAsyncThunk(
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          "Access-Control-Allow-Credentials": "true",
         },
         credentials: "include",
         body: JSON.stringify(user),
@@ -54,6 +55,7 @@ export const loginHandler = createAsyncThunk(
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          "Access-Control-Allow-Credentials": "true",
         },
         credentials: "include",
         body: JSON.stringify(user),
