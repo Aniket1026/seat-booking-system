@@ -67,6 +67,7 @@ export const loginHandler = async (
       res.status(400).json({
         error: "Incorrect password",
       });
+      return
     }
 
     const token = await createToken({ id: user?.id });

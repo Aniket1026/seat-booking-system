@@ -23,6 +23,7 @@ export const signUpHandler = createAsyncThunk(
         headers: {
           "Content-Type": "application/json",
         },
+        credentials: "include",
         body: JSON.stringify(user),
       });
 
@@ -54,6 +55,7 @@ export const loginHandler = createAsyncThunk(
         headers: {
           "Content-Type": "application/json",
         },
+        credentials: "include",
         body: JSON.stringify(user),
       });
 
